@@ -1,0 +1,88 @@
+----------------------------
+DHCP ROUTER
+---------------------------
+en
+conf t
+service dhcp
+ip dhcp pool Admin-pool
+netowkr 192.168.1.0 255.255.255.192
+default-router 192.168.1.1
+dns-server 192.168.1.1
+domain-name admin.com 
+ex
+ip dhcp pool Hrteam-pool
+netowkr 192.168.1.64 255.255.255.192
+default-router 192.168.1.165
+dns-server 192.168.1.65
+domain-name hrteam.com 
+ex
+ip dhcp pool Accounts-pool
+netowkr 192.168.1.128 255.255.255.192
+default-router 192.168.1.129
+dns-server 192.168.1.129
+domain-name accounts.com 
+ex
+ip dhcp pool it-pool
+netowkr 192.168.1.192 255.255.255.192
+default-router 192.168.1.193
+dns-server 192.168.1.193
+domain-name it.com 
+do wr
+ex
+
+
+-----------------------------
+Router
+------------------------------
+
+en
+conf t
+int f0/0
+no sh
+do wr
+ex
+int f0/0.10
+encapsulation dot1Q 10
+ip add 192.168.1.1. 255.255.255.192
+ex 
+int f0/0.20
+encapsulation dot1Q 20
+ip add 192.168.1.65. 255.255.255.192
+ex 
+int f0/0.30
+encapsulation dot1Q 30
+ip add 192.168.1.129. 255.255.255.192
+ex 
+int f0/0.40
+encapsulation dot1Q 40
+ip add 192.168.1.193. 255.255.255.192
+do wr
+ex
+
+
+---------------------------------------
+SWITCH
+---------------------------------------
+en
+conf t
+int range f0/1-3
+switchport mode access
+switchport access vlan10
+ex
+int range f0/11-13
+switchport mode access
+switchport access vlan20
+ex
+int range f0/16-18
+switchport mode access
+switchport access vlan30
+ex
+int range f0/21-23
+switchport mode access
+switchport access vlan40
+ex
+itn g0/1
+switchport mode trunk
+do wr
+ex
+
